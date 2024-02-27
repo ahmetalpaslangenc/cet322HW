@@ -1,0 +1,36 @@
+from datetime import datetime
+
+class Book:
+    def __init__(self, name, author, page_number, due_date):
+        self.name = name
+        self.author = author
+        self.page_number = page_number
+        self.due_date = datetime.strptime(due_date, '%Y-%m-%d').date()
+
+    def days_until_due(self):
+        today = datetime.now().date()
+        delta = self.due_date - today
+        return delta.days
+
+    def due_date_status(self):
+        days_remaining = self.days_until_due()
+        if days_remaining < 0:
+            return 'red'
+        elif days_remaining < 7:
+            return 'yellow'
+        else:
+            return 'green'
+
+class Library:
+    def __init__(self, library_name):
+        self.books = []
+        self.library_name = library_name
+
+    def add_book(self, book):
+        self.books.append(book)
+
+    def display_books(self):
+        print(f"Books available in '{self.library_name}':")
+        for book in self.books:
+            status = book.due_date_status()
+            print(f"Title: '{book.name}' | Author: {book.author} | Due Date: {book.due_date} | Status: {status}")
